@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f0">
+  <meta name="description" content="Scoutly brings product listings and prices together so you can compare before you buy.">
+  <title>Scoutly — Find it. Compare it. Choose.</title>
+  <style>
+    :root {
+      --ink: #152d27;
+      --muted: #65716b;
+      --paper: #f5f6f0;
+      --surface: #fffefa;
+      --line: #e5e9df;
+      --green: #244e42;
+      --green-2: #356a56;
+      --lime: #d8f176;
+      --orange: #f2a16f;
+      --lavender: #d9d6f4;
+      --shadow: 0 18px 55px rgba(27, 47, 40, .09);
+      --radius: 24px;
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    .demo-ribbon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 6px 16px;
+      color: #eaf1dc;
+      background: #183b31;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .045em;
+      text-align: center;
+    }
+    .demo-ribbon .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--lime); }
+    .site-header {
+      width: min(1200px, calc(100% - 48px));
+      margin: 0 auto;
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.055em;
+    }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      color: var(--lime);
+      background: var(--green);
+    }
+    .brand-mark svg { width: 20px; height: 20px; }
+    .nav-links { display: flex; align-items: center; gap: 30px; margin-left: auto; }
+    .nav-links a {
+      color: #53635b;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .region-pill, .soft-button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #43564c;
+      background: rgba(255,255,255,.66);
+      font-size: 12px;
+      font-weight: 650;
+      text-decoration: none;
+    }
+    .region-pill .flag { font-size: 14px; }
+    .hero-wrap {
+      position: relative;
+      overflow: hidden;
+      width: min(1200px, calc(100% - 48px));
+      margin: 4px auto 0;
+      padding: clamp(34px, 6vw, 76px);
+      border: 1px solid #e5e9df;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 86% 13%, rgba(216,241,118,.46), transparent 26%),
+        radial-gradient(circle at 78% 88%, rgba(217,214,244,.52), transparent 32%),
+        linear-gradient(123deg, #fffefa 0%, #f6f8ef 58%, #edf2e6 100%);
+    }
+    .hero-wrap:after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .21;
+      background-image: radial-gradient(#507263 0.6px, transparent 0.6px);
+      background-size: 15px 15px;
+      mask-image: linear-gradient(90deg, transparent, black);
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr);
+      align-items: center;
+      gap: 52px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 22px;
+      color: var(--green-2);
+      font-size: 11px;
+      font-weight: 750;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow-mark {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #88ab4f;
+      box-shadow: 0 0 0 4px rgba(136,171,79,.15);
+    }
+    h1 {
+      max-width: 640px;
+      margin: 0;
+      font-size: clamp(42px, 6.2vw, 76px);
+      line-height: .99;
+      letter-spacing: -.075em;
+      font-weight: 750;
+    }
+    h1 .accent { color: #5b8165; }
+    .hero-copy {
+      max-width: 510px;
+      margin: 20px 0 27px;
+      color: #66726a;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    .search-form {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: min(680px, 100%);
+      padding: 7px;
+      border: 1px solid #e3e8dd;
+      border-radius: 17px;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(30, 57, 47, .11);
+    }
+    .search-icon { flex: 0 0 auto; width: 21px; height: 21px; margin-left: 12px; color: #849188; }
+    .search-form input {
+      width: 100%;
+      min-width: 0;
+      height: 46px;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+      background: transparent;
+      font-size: 14px;
+    }
+    .search-form input::placeholder { color: #929d95; }
+    .search-button {
+      flex: 0 0 auto;
+      min-height: 46px;
+      padding: 0 19px;
+      border: 0;
+      border-radius: 12px;
+      color: #1c3329;
+      background: var(--lime);
+      font-size: 13px;
+      font-weight: 750;
+      transition: transform .16s ease, background .16s ease;
+    }
+    .search-button:hover { transform: translateY(-1px); background: #cbed61; }
+    .search-help {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0 0 3px;
+      color: #738077;
+      font-size: 11px;
+    }
+    .search-help svg { width: 14px; height: 14px; }
+    .quick-searches { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+    .quick-label { margin-right: 3px; color: #748077; font-size: 11px; font-weight: 650; }
+    .quick-chip {
+      padding: 7px 11px;
+      border: 1px solid rgba(40,74,59,.13);
+      border-radius: 999px;
+      color: #43564b;
+      background: rgba(255,255,255,.7);
+      font-size: 11px;
+      font-weight: 650;
+    }
+    .quick-chip:hover { border-color: #9bb581; background: #fff; }
+    .hero-visual { position: relative; min-height: 360px; display: grid; place-items: center; }
+    .visual-orbit {
+      position: absolute;
+      width: 334px;
+      height: 334px;
+      border: 1px solid rgba(58,94,72,.13);
+      border-radius: 50%;
+    }
+    .visual-orbit:before, .visual-orbit:after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(58,94,72,.12);
+      border-radius: 50%;
+      inset: 23px;
+    }
+    .visual-orbit:after { inset: 52px; }
+    .visual-card {
+      position: relative;
+      width: min(100%, 355px);
+      padding: 20px;
+      border: 1px solid rgba(223,229,218,.9);
+      border-radius: 25px;
+      background: rgba(255,255,251,.91);
+      box-shadow: 0 24px 70px rgba(34,60,48,.16);
+      transform: rotate(-2deg);
+    }
+    .visual-card-top { display:flex; justify-content:space-between; align-items:center; color:#758078; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .live-dot { display:inline-flex; align-items:center; gap:6px; color:#658054; letter-spacing:0; text-transform:none; }
+    .live-dot:before { content:""; width:6px; height:6px; border-radius:50%; background:#a1c95d; }
+    .visual-product { display:flex; align-items:center; gap:14px; margin:20px 0 17px; }
+    .product-art {
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      width:68px;
+      height:68px;
+      border-radius:19px;
+      color:#254d40;
+      background:#e9efdf;
+    }
+    .product-art svg { width:41px; height:41px; }
+    .visual-product h3 { margin:0 0 3px; font-size:16px; letter-spacing:-.035em; }
+    .visual-product p { margin:0; color:#78847b; font-size:11px; }
+    .visual-divider { height:1px; background:#edf0e9; }
+    .visual-offer { display:grid; grid-template-columns:1fr auto; align-items:center; gap:12px; padding:13px 0; border-bottom:1px solid #edf0e9; }
+    .visual-offer:last-of-type { border:0; }
+    .offer-store { display:flex; align-items:center; gap:9px; color:#45544a; font-size:12px; font-weight:650; }
+    .store-mark { display:grid; place-items:center; width:27px; height:27px; border-radius:9px; color:#274538; background:#eaf0e5; font-size:10px; font-weight:800; }
+    .offer-price { font-size:15px; font-weight:760; letter-spacing:-.04em; }
+    .offer-lowest .store-mark { color:#66552d; background:#f8efce; }
+    .lowest-pill {
+      display:inline-block;
+      margin-left:6px;
+      padding:3px 7px;
+      border-radius:999px;
+      color:#41582b;
+      background:#eaf4cf;
+      font-size:9px;
+      font-weight:750;
+      letter-spacing:0;
+      vertical-align:2px;
+    }
+    .visual-foot { display:flex; justify-content:space-between; align-items:center; margin-top:12px; color:#8b968e; font-size:10px; }
+    .floating-note {
+      position:absolute;
+      right:-4px;
+      bottom:36px;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      padding:12px 15px;
+      border:1px solid rgba(224,229,218,.9);
+      border-radius:15px;
+      background:#fffefa;
+      box-shadow:0 12px 32px rgba(35,57,47,.13);
+      transform:rotate(3deg);
+    }
+    .floating-note .sparkle { display:grid; place-items:center; width:28px; height:28px; border-radius:9px; color:#695f99; background:#eeecfa; }
+    .floating-note strong { display:block; font-size:11px; }
+    .floating-note small { display:block; margin-top:2px; color:#7e8a81; font-size:9px; }
+    .value-strip {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      width:min(1010px,calc(100% - 48px));
+      margin:26px auto 0;
+      padding:14px 22px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(255,255,255,.58);
+    }
+    .value-item { display:flex; align-items:center; justify-content:center; gap:10px; color:#56655b; font-size:12px; font-weight:650; }
+    .value-item + .value-item { border-left:1px solid var(--line); }
+    .value-icon { display:grid; place-items:center; width:28px; height:28px; border-radius:9px; color:#46634e; background:#edf2e4; }
+    .value-icon svg { width:15px; height:15px; }
+    .section {
+      width:min(1200px,calc(100% - 48px));
+      margin:0 auto;
+      padding:88px 0 0;
+    }
+    .section-heading { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:24px; }
+    .section-kicker { margin:0 0 8px; color:#778b6b; font-size:10px; font-weight:750; letter-spacing:.13em; text-transform:uppercase; }
+    h2 { margin:0; font-size:clamp(25px,3.3vw,36px); letter-spacing:-.06em; line-height:1.1; }
+    .section-description { max-width:380px; margin:8px 0 0; color:#758078; font-size:13px; line-height:1.6; }
+    .text-link { display:inline-flex; align-items:center; gap:7px; color:#40634e; font-size:12px; font-weight:700; text-decoration:none; white-space:nowrap; }
+    .text-link:hover { color:#183d31; }
+    .category-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; }
+    .category-card {
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:20px;
+      min-height:142px;
+      padding:17px;
+      border:1px solid var(--line);
+      border-radius:19px;
+      color:var(--ink);
+      background:var(--surface);
+      text-align:left;
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .category-card:hover { transform:translateY(-3px); border-color:#c6d3bd; box-shadow:0 12px 32px rgba(35,59,45,.08); }
+    .category-card strong { font-size:12px; }
+    .category-card small { display:block; margin-top:3px; color:#879189; font-size:10px; }
+    .category-icon { display:grid; place-items:center; width:41px; height:41px; border-radius:13px; font-size:20px; }
+    .c-fashion { background:#f8e8dc; }
+    .c-tech { background:#e5ecf4; }
+    .c-home { background:#e5efdf; }
+    .c-health { background:#f4e8f0; }
+    .c-sports { background:#f5edcf; }
+    .c-beauty { background:#eae7f6; }
+    .results-wrap { display:none; padding-top:58px; }
+    .results-wrap.is-visible { display:block; }
+    .results-panel {
+      padding:26px;
+      border:1px solid var(--line);
+      border-radius:26px;
+      background:#fffefa;
+      box-shadow:var(--shadow);
+    }
+    .results-header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:20px; }
+    .results-header h2 { font-size:26px; }
+    .results-header p { margin:7px 0 0; color:#7a857e; font-size:12px; }
+    .results-tools { display:flex; align-items:center; gap:9px; }
+    .result-count { padding:7px 10px; border-radius:999px; color:#526d55; background:#eff4e7; font-size:10px; font-weight:700; white-space:nowrap; }
+    .sort-select {
+      height:35px;
+      padding:0 29px 0 11px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      color:#4b5d51;
+      background:#fff;
+      font-size:11px;
+      outline-color:#9eaf8f;
+    }
+    .results-notice {
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      margin-bottom:16px;
+      padding:11px 13px;
+      border:1px solid #ece8d4;
+      border-radius:12px;
+      color:#6b654c;
+      background:#faf8ed;
+      font-size:11px;
+      line-height:1.45;
+    }
+    .results-notice svg { flex:0 0 auto; width:15px; height:15px; margin-top:1px; color:#a18839; }
+    .result-list { display:grid; gap:12px; }
+    .result-card {
+      display:grid;
+      grid-template-columns:62px minmax(150px,1fr) auto auto;
+      align-items:center;
+      gap:16px;
+      padding:15px;
+      border:1px solid #e9ece5;
+      border-radius:17px;
+      background:#fff;
+    }
+    .result-card .product-art { width:60px; height:60px; border-radius:16px; }
+    .result-card .product-art svg { width:37px; height:37px; }
+    .result-title { margin:0; font-size:15px; letter-spacing:-.035em; }
+    .result-meta { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:6px; color:#7a867e; font-size:10px; }
+    .meta-dot { width:3px; height:3px; border-radius:50%; background:#aab4aa; }
+    .result-price-block { min-width:120px; text-align:right; }
+    .result-price-label { display:block; color:#7f8981; font-size:9px; }
+    .result-price { display:block; margin-top:2px; font-size:20px; font-weight:780; letter-spacing:-.06em; }
+    .result-offers { display:block; margin-top:1px; color:#7e8980; font-size:9px; }
+    .view-offers {
+      min-height:38px;
+      padding:0 13px;
+      border:1px solid #dfe7d8;
+      border-radius:11px;
+      color:#315645;
+      background:#f7f9f2;
+      font-size:10px;
+      font-weight:750;
+      white-space:nowrap;
+    }
+    .view-offers:hover { background:#edf3e3; }
+    .offer-list { display:none; grid-column:1/-1; padding-top:12px; border-top:1px solid #edf0e9; }
+    .offer-list.is-open { display:grid; }
+    .offer-row { display:grid; grid-template-columns:minmax(120px,1fr) auto auto; align-items:center; gap:18px; padding:10px 4px; border-bottom:1px solid #f0f2ed; }
+    .offer-row:last-child { border-bottom:0; }
+    .offer-brand { display:flex; align-items:center; gap:9px; color:#526158; font-size:11px; font-weight:650; }
+    .offer-brand-mark { display:grid; place-items:center; width:26px; height:26px; border-radius:8px; color:#345647; background:#eff3e8; font-size:9px; font-weight:800; }
+    .offer-row-price { font-size:13px; font-weight:740; }
+    .offer-open {
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      color:#536b57;
+      font-size:10px;
+      font-weight:700;
+      text-decoration:none;
+    }
+    .offer-open:hover { color:#1b4b38; }
+    .no-results { padding:34px 20px; text-align:center; }
+    .no-results-icon { display:grid; place-items:center; width:46px; height:46px; margin:0 auto 12px; border-radius:15px; color:#5a715f; background:#eff3e7; font-size:20px; }
+    .no-results h3 { margin:0; font-size:16px; letter-spacing:-.035em; }
+    .no-results p { max-width:480px; margin:7px auto 18px; color:#7d8980; font-size:11px; }
+    .store-links { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; }
+    .store-search-link { display:inline-flex; align-items:center; gap:7px; padding:9px 12px; border:1px solid var(--line); border-radius:10px; color:#405a4b; background:#fff; font-size:10px; font-weight:700; text-decoration:none; }
+    .store-search-link:hover { border-color:#b9c9b1; background:#f7f9f2; }
+    .how-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .how-card { min-height:190px; padding:23px; border:1px solid var(--line); border-radius:20px; background:rgba(255,255,255,.6); }
+    .step-number { display:grid; place-items:center; width:31px; height:31px; border-radius:10px; color:#526747; background:#eaf1dc; font-size:11px; font-weight:800; }
+    .how-card h3 { margin:20px 0 7px; font-size:15px; letter-spacing:-.04em; }
+    .how-card p { max-width:270px; margin:0; color:#78847b; font-size:12px; line-height:1.6; }
+    .cta-band {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+      margin:72px 0 0;
+      padding:29px 32px;
+      border-radius:22px;
+      color:#f3f5e8;
+      background:#21483b;
+    }
+    .cta-band h2 { max-width:480px; font-size:24px; }
+    .cta-band p { margin:7px 0 0; color:#cad5ca; font-size:12px; }
+    .cta-band .search-button { min-width:138px; }
+    footer { width:min(1200px,calc(100% - 48px)); margin:52px auto 0; padding:22px 0 30px; border-top:1px solid var(--line); }
+    .footer-main { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    .footer-main .brand { font-size:17px; }
+    .footer-main .brand-mark { width:29px; height:29px; border-radius:10px; }
+    .footer-note { max-width:500px; margin:0; color:#879188; font-size:10px; line-height:1.5; text-align:right; }
+    .toast {
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      z-index:10;
+      max-width:calc(100% - 32px);
+      padding:12px 16px;
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:13px;
+      color:#f7f7ef;
+      background:#203b31;
+      box-shadow:0 12px 35px rgba(20,39,31,.25);
+      font-size:12px;
+      opacity:0;
+      pointer-events:none;
+      transform:translate(-50%,12px);
+      transition:opacity .2s ease, transform .2s ease;
+    }
+    .toast.is-visible { opacity:1; transform:translate(-50%,0); }
+    @media (max-width: 940px) {
+      .hero-grid { grid-template-columns:1fr; gap:12px; }
+      .hero-visual { min-height:330px; }
+      .hero-copy { max-width:650px; }
+      .category-grid { grid-template-columns:repeat(3,1fr); }
+      .result-card { grid-template-columns:58px minmax(120px,1fr) auto; }
+      .view-offers { grid-column:2/4; justify-self:end; }
+      .result-price-block { grid-column:3; grid-row:1; }
+    }
+    @media (max-width: 650px) {
+      .site-header { width:calc(100% - 28px); height:68px; gap:14px; }
+      .brand { font-size:19px; }
+      .nav-links { display:none; }
+      .header-actions { margin-left:auto; }
+      .region-pill { min-height:35px; padding:0 10px; font-size:10px; }
+      .hero-wrap { width:calc(100% - 20px); margin-top:2px; padding:28px 19px 25px; border-radius:25px; }
+      .hero-grid { gap:3px; }
+      .eyebrow { margin-bottom:16px; font-size:9px; }
+      h1 { font-size:46px; }
+      .hero-copy { margin:15px 0 20px; font-size:13px; }
+      .search-form { gap:4px; padding:5px; border-radius:14px; }
+      .search-icon { width:18px; height:18px; margin-left:8px; }
+      .search-form input { height:42px; font-size:12px; }
+      .search-button { min-height:42px; padding:0 12px; font-size:11px; }
+      .search-help { font-size:9px; }
+      .quick-searches { margin-top:17px; }
+      .hero-visual { min-height:300px; margin-top:12px; }
+      .visual-orbit { width:275px; height:275px; }
+      .visual-card { width:min(100%,330px); padding:17px; }
+      .floating-note { right:-2px; bottom:20px; }
+      .value-strip { grid-template-columns:1fr; gap:12px; width:calc(100% - 28px); padding:14px; }
+      .value-item { justify-content:flex-start; font-size:11px; }
+      .value-item + .value-item { padding-top:11px; border-top:1px solid var(--line); border-left:0; }
+      .section { width:calc(100% - 28px); padding-top:64px; }
+      .section-heading { align-items:flex-start; flex-direction:column; gap:12px; }
+      .category-grid { grid-template-columns:repeat(2,1fr); gap:9px; }
+      .category-card { min-height:122px; padding:13px; gap:15px; }
+      .results-wrap { padding-top:40px; }
+      .results-panel { padding:16px; border-radius:20px; }
+      .results-header { flex-direction:column; }
+      .results-tools { width:100%; justify-content:space-between; }
+      .result-card { grid-template-columns:50px minmax(0,1fr) auto; gap:10px; padding:11px; }
+      .result-card .product-art { width:50px; height:50px; }
+      .result-card .product-art svg { width:31px; height:31px; }
+      .result-title { font-size:12px; }
+      .result-meta { gap:6px; font-size:9px; }
+      .result-price-block { min-width:83px; }
+      .result-price { font-size:16px; }
+      .view-offers { grid-column:1/-1; justify-self:stretch; }
+      .offer-row { grid-template-columns:minmax(80px,1fr) auto; gap:7px; }
+      .offer-open { grid-column:1/-1; justify-self:start; margin-left:35px; }
+      .how-grid { grid-template-columns:1fr; }
+      .how-card { min-height:150px; }
+      .cta-band { align-items:flex-start; flex-direction:column; margin-top:52px; padding:23px; }
+      .cta-band h2 { font-size:22px; }
+      footer { width:calc(100% - 28px); }
+      .footer-main { align-items:flex-start; flex-direction:column; }
+      .footer-note { text-align:left; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; transition:none !important; }
+    }
+  </style>
+<style>
+.live-answer { white-space:pre-wrap; line-height:1.85; font-size:14px; color:#263c33; overflow-wrap:anywhere; }
+.live-message { padding:24px; color:#64736a; background:#f6f8f2; border-radius:14px; font-size:13px; }
+.citation { color:#2c6848; font-weight:750; margin:0 3px; text-decoration:underline; overflow-wrap:anywhere; }
+.source-heading { font-size:14px; margin:22px 0 6px; }
+.source-list { display:flex; flex-wrap:wrap; gap:10px; font-size:12px; }
+.source-list .citation { padding:8px 10px; border:1px solid #dfe8da; border-radius:10px; text-decoration:none; background:#f7faf4; }
+.suggestions-frame { display:block; width:100%; min-height:100px; border:0; background:white; }
+.search-button:disabled { opacity:.65; cursor:wait; }
+.settings-dialog { width:min(460px,calc(100% - 32px)); padding:26px; border:1px solid #dce5d9; border-radius:22px; color:var(--ink); background:#fffefa; box-shadow:var(--shadow); }
+.settings-dialog::backdrop { background:rgba(18,38,30,.55); }
+.settings-dialog h2 { font-size:24px; }
+.settings-dialog p { color:#66766c; font-size:12px; line-height:1.6; }
+.settings-form { display:grid; gap:12px; margin-top:18px; }
+.settings-form label { display:grid; gap:5px; font-size:12px; font-weight:700; }
+.settings-form input,.settings-form select { min-height:42px; padding:0 11px; border:1px solid #dfe7db; border-radius:10px; background:#fff; color:var(--ink); }
+.settings-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:5px; }
+.settings-actions button { min-height:40px; border-radius:10px; padding:0 14px; font-size:12px; font-weight:700; }
+.settings-actions .secondary { border:1px solid #dfe7db; background:white; color:var(--ink); }
+</style>
+</head>
+<body>
+  <div class="demo-ribbon" role="status">正在检查搜索配置……</div>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="Scoutly home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M10.7 3.8a6.9 6.9 0 1 0 0 13.8 6.9 6.9 0 0 0 0-13.8Z" stroke="currentColor" stroke-width="2.2"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M7.5 10.7h6.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </span>
+      <span>scoutly</span>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#categories">Categories</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#results" id="nav-results">Compare prices</a>
+    </nav>
+    <div class="header-actions">
+      <button class="soft-button" type="button" id="settings-open">配置 API</button>
+      <span class="region-pill"><span class="flag" aria-hidden="true">🇲🇾</span> Malaysia <span aria-hidden="true">⌄</span></span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-wrap" aria-labelledby="hero-title">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> 一次搜索，了解更多选择</p>
+          <h1 id="hero-title">搜索商品。<br><span class="accent">比较价格。</span><br>轻松选择。</h1>
+          <p class="hero-copy">输入商品名称，Scoutly 使用 AI 联网搜索商家与价格，并附上来源供你核对。</p>
+          <form class="search-form" id="search-form" role="search">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input id="search-input" type="search" autocomplete="off" aria-label="搜索商品" placeholder="例如：Adidas Samba 白色 40 码">
+            <button class="search-button" type="submit">搜索商品 <span aria-hidden="true">↗</span></button>
+          </form>
+          <p class="search-help">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2.2 12 7l5.2 2-5.2 2L10 15.8 8 11l-5.2-2L8 7l2-4.8Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="m15.7 14.2.8 1.8 1.8.7-1.8.8-.8 1.8-.7-1.8-1.8-.8 1.8-.7.7-1.8Z" fill="currentColor"/></svg>
+            输入品牌、型号、颜色或尺码，搜索时可能产生 API 费用
+          </p>
+          <div class="quick-searches" aria-label="Popular searches">
+            <span class="quick-label">试试：</span>
+            <button class="quick-chip" type="button" data-query="Adidas Samba">Adidas Samba</button>
+            <button class="quick-chip" type="button" data-query="headphones">Headphones</button>
+            <button class="quick-chip" type="button" data-query="laptop">Laptops</button>
+            <button class="quick-chip" type="button" data-query="vitamin">Wellness</button>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="Illustration showing prices from multiple stores">
+          <div class="visual-orbit" aria-hidden="true"></div>
+          <div class="visual-card">
+            <div class="visual-card-top"><span>比较界面示意</span><span class="live-dot">示例</span></div>
+            <div class="visual-product">
+              <div class="product-art" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><path d="M7 28.6c4.1-.2 7-2.6 9.1-7.7l3.3 2.7c3.5 2.9 7.1 4.8 11.9 5.8l8.8 1.8c2.4.5 4 2.3 4 4.6v2.6H7.4c-2.1 0-3.4-1.5-3.4-3.3 0-3.1 1.2-5 3-6.5Z" fill="#f1c88e" stroke="#355c4b" stroke-width="1.8" stroke-linejoin="round"/><path d="m16.1 22.5 5.5 4.1m-.8-5.1 5.8 5.9m-15.3 5.8h27" stroke="#355c4b" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </div>
+              <div><h3>adidas Samba OG</h3><p>Unisex sneaker · Cream / black</p></div>
+            </div>
+            <div class="visual-divider"></div>
+            <div class="visual-offer offer-lowest"><div class="offer-store"><span class="store-mark">S</span> Shop A <span class="lowest-pill">Lowest</span></div><span class="offer-price">RM 389</span></div>
+            <div class="visual-offer"><div class="offer-store"><span class="store-mark">Z</span> Shop B</div><span class="offer-price">RM 455</span></div>
+            <div class="visual-offer"><div class="offer-store"><span class="store-mark">A</span> Shop C</div><span class="offer-price">RM 549</span></div>
+            <div class="visual-foot"><span>示意价格，非实时</span><span>搜索后查看真实来源 ↗</span></div>
+          </div>
+          <div class="floating-note">
+            <span class="sparkle" aria-hidden="true">✦</span>
+            <span><strong>One clear view</strong><small>Prices, grouped and sorted</small></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="value-strip" aria-label="Product benefits">
+      <div class="value-item"><span class="value-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><circle cx="8.7" cy="8.7" r="5.5" stroke="currentColor" stroke-width="1.6"/><path d="m13 13 3.6 3.6M6 8.7h5.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span> Search the way you think</div>
+      <div class="value-item"><span class="value-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M3 5.2h14M5 10h10m-7 4.8h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span> Compare prices side by side</div>
+      <div class="value-item"><span class="value-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M5 3.5h10v13l-5-3.2-5 3.2v-13Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span> Choose your shop, then go direct</div>
+    </div>
+
+    <section class="results-wrap section" id="results" aria-live="polite" aria-label="Product search results">
+      <div class="results-panel">
+        <div class="results-header">
+          <div>
+            <p class="section-kicker">Scoutly 联网搜索</p>
+            <h2 id="results-title">比较报价</h2>
+            <p id="results-subtitle">搜索带来源的商品信息。</p>
+          </div>
+          <div class="results-tools">
+            <span class="result-count" id="result-count"></span>
+            <label class="visually-hidden" for="sort-select">Sort results</label>
+            <select class="sort-select" id="sort-select" aria-label="Sort results">
+              <option value="low">Lowest price</option>
+              <option value="high">Highest price</option>
+              <option value="offers">Most offers</option>
+            </select>
+          </div>
+        </div>
+        <div class="results-notice" id="demo-notice">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.3" stroke="currentColor" stroke-width="1.4"/><path d="M10 9v4.1M10 6.2v.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span>价格、库存与尺码可能变化，请打开来源核对。</span>
+        </div>
+        <div class="result-list" id="result-list"></div>
+      </div>
+    </section>
+
+    <section class="section" id="categories">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">从这里开始</p>
+          <h2>搜索你想要的商品</h2>
+          <p class="section-description">输入运动鞋、电子产品、生活用品等商品，比较网络上的不同选择。</p>
+        </div>
+        <a class="text-link" href="#search-form" id="browse-link">开始搜索 <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="category-grid">
+        <button class="category-card" type="button" data-category="Fashion"><span class="category-icon c-fashion" aria-hidden="true">👟</span><span><strong>Fashion</strong><small>Shoes, clothes & bags</small></span></button>
+        <button class="category-card" type="button" data-category="Electronics"><span class="category-icon c-tech" aria-hidden="true">🎧</span><span><strong>Electronics</strong><small>Audio, phones & more</small></span></button>
+        <button class="category-card" type="button" data-category="Home"><span class="category-icon c-home" aria-hidden="true">🏠</span><span><strong>Home</strong><small>Appliances & living</small></span></button>
+        <button class="category-card" type="button" data-category="Health"><span class="category-icon c-health" aria-hidden="true">🌿</span><span><strong>Health</strong><small>Wellness essentials</small></span></button>
+        <button class="category-card" type="button" data-category="Sports"><span class="category-icon c-sports" aria-hidden="true">🏃</span><span><strong>Sports</strong><small>Gear for your next move</small></span></button>
+        <button class="category-card" type="button" data-category="Beauty"><span class="category-icon c-beauty" aria-hidden="true">✨</span><span><strong>Beauty</strong><small>Skincare & personal care</small></span></button>
+      </div>
+    </section>
+
+    <section class="section" id="how-it-works">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">简单几步</p>
+          <h2>少开几个网页，多一份清晰。</h2>
+        </div>
+      </div>
+      <div class="how-grid">
+        <article class="how-card"><span class="step-number">01</span><h3>输入商品</h3><p>填写商品名称、品牌，以及需要的颜色或尺码。</p></article>
+        <article class="how-card"><span class="step-number">02</span><h3>比较搜索结果</h3><p>查看 AI 找到的商店、标价和来源。</p></article>
+        <article class="how-card"><span class="step-number">03</span><h3>选择商店</h3><p>打开商店链接，核对最新价格与商品详情。</p></article>
+      </div>
+      <div class="cta-band">
+        <div><h2>准备好搜索你想要的商品了吗？</h2><p>输入商品名称，开始联网搜索。</p></div>
+        <a class="search-button" href="#search-form" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none">开始搜索 <span aria-hidden="true" style="margin-left:7px">↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-main">
+      <a class="brand" href="#" aria-label="Scoutly home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M10.7 3.8a6.9 6.9 0 1 0 0 13.8 6.9 6.9 0 0 0 0-13.8Z" stroke="currentColor" stroke-width="2.2"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span><span>scoutly</span></a>
+      <p class="footer-note">联网结果可能不完整或过时。请在商店页面确认价格、尺码、库存及卖家信息。</p>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
+    <h2 id="settings-title">配置 AI 搜索</h2>
+    <p>密钥只在当前页面的内存中保留，并在搜索时发送给当前网站的服务器处理；关闭或刷新页面后需要重新输入。请只在你信任的 HTTPS 网站或本机使用。</p>
+    <form id="settings-form" class="settings-form">
+      <label>供应商
+        <select id="settings-provider"><option value="gemini">Gemini + Google Search</option><option value="openrouter">OpenRouter Web Search</option></select>
+      </label>
+      <label>API 密钥
+        <input id="settings-key" type="password" required autocomplete="off" spellcheck="false" placeholder="输入你的密钥">
+      </label>
+      <label>模型名称（可选）
+        <input id="settings-model" type="text" maxlength="120" autocomplete="off" placeholder="留空使用默认模型">
+      </label>
+      <div class="settings-actions">
+        <button class="search-button" type="submit">在本次会话中使用</button>
+        <button class="secondary" id="settings-clear" type="button">清除密钥</button>
+        <button class="secondary" id="settings-close" type="button">取消</button>
+      </div>
+    </form>
+  </dialog>
+
+  <style>.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>
+  <script src="/app.js" defer></script>
+
+</body>
+</html>
+
